@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You TP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg-black:#05010c;
+  --bg-deep:#120726;
+  --purple-deep:#3a1660;
+  --purple:#8b3fc9;
+  --purple-bright:#b565e8;
+  --purple-light:#e6cdfb;
+  --star:#c9a4f5;
+  --text:#f1e6fb;
+  --pink:#f0b9ee;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg-black);
+  color:var(--text);
+  font-family:'Cormorant Garamond', serif;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* ---------- starfield ---------- */
+#stars-container{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(59,20,99,0.35), transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(139,63,201,0.25), transparent 55%),
+    var(--bg-black);
+  pointer-events:none;
+}
+.star{
+  position:absolute;
+  background:var(--star);
+  border-radius:50%;
+  box-shadow:0 0 6px 1px rgba(201,164,245,0.8);
+  animation:twinkle ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%,100%{opacity:.25; transform:scale(1);}
+  50%{opacity:1; transform:scale(1.35);}
+}
+.shooting-star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:linear-gradient(90deg, rgba(230,205,251,1), rgba(230,205,251,0));
+  border-radius:50%;
+  filter:drop-shadow(0 0 6px var(--purple-bright));
+  animation:shoot 4.5s linear infinite;
+  opacity:0;
+}
+@keyframes shoot{
+  0%{opacity:0; transform:translate(0,0) scaleX(1);}
+  2%{opacity:1;}
+  15%{opacity:0; transform:translate(-260px,180px) scaleX(20);}
+  100%{opacity:0;}
+}
+
+/* ---------- floating flowers ---------- */
+.floating-flowers{position:fixed; inset:0; z-index:0; pointer-events:none;}
+.flower{
+  position:absolute;
+  width:34px; height:34px;
+  opacity:.55;
+  animation:drift linear infinite;
+}
+@keyframes drift{
+  0%{transform:translateY(0) rotate(0deg); opacity:0;}
+  8%{opacity:.55;}
+  92%{opacity:.4;}
+  100%{transform:translateY(-110vh) rotate(300deg); opacity:0;}
+}
+
+section{
+  position:relative;
+  z-index:1;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:80px 24px;
+}
+
+h1,h2{
+  font-family:'Playfair Display', serif;
+  font-weight:700;
+  color:var(--purple-light);
+  letter-spacing:.02em;
+  margin:0 0 10px;
+}
+
+/* ---------- hero ---------- */
+.hero-title{
+  font-size:clamp(2.4rem, 6vw, 4.2rem);
+  font-style:italic;
+  text-shadow:0 0 30px rgba(181,101,232,0.55);
+}
+.hero-title span{
+  color:var(--pink);
+  border-bottom:1px solid rgba(240,185,238,0.4);
+}
+.hero-sub{
+  font-size:1.3rem;
+  color:var(--star);
+  letter-spacing:.08em;
+  margin-top:6px;
+}
+.counter{
+  margin-top:34px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;
+  color:var(--purple-light);
+  letter-spacing:.03em;
+  background:rgba(139,63,201,0.12);
+  border:1px solid rgba(181,101,232,0.35);
+  padding:12px 22px;
+  border-radius:40px;
+}
+.counter b{color:var(--pink); font-weight:600;}
+.scroll-cue{
+  position:absolute;
+  bottom:36px;
+  font-size:.85rem;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  color:var(--purple-bright);
+  animation:bob 2.2s ease-in-out infinite;
+}
+@keyframes bob{
+  0%,100%{transform:translateY(0); opacity:.6;}
+  50%{transform:translateY(8px); opacity:1;}
+}
+
+/* ---------- gallery ---------- */
+.gallery p.tag{color:var(--purple-bright); letter-spacing:.25em; text-transform:uppercase; font-size:.8rem; margin-bottom:34px;}
+.frame-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(220px, 320px));
+  gap:34px;
+  max-width:760px;
+}
+.frame{
+  position:relative;
+  background:linear-gradient(160deg, rgba(58,22,96,0.5), rgba(5,1,12,0.6));
+  border:1px solid rgba(181,101,232,0.4);
+  border-radius:10px;
+  padding:12px;
+  box-shadow:0 10px 40px rgba(60,10,90,0.45);
+  transition:transform .4s ease;
+}
+.frame:hover{transform:translateY(-6px) rotate(-0.3deg);}
+.frame img, .frame video{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  border-radius:6px;
+  display:block;
+  background:rgba(255,255,255,0.03);
+}
+.frame figcaption{
+  margin-top:10px;
+  font-size:1rem;
+  color:var(--purple-light);
+  font-style:italic;
+}
+.frame .corner-flower{
+  position:absolute; top:-14px; left:-14px; width:30px; height:30px;
+}
+
+/* ---------- constellation ---------- */
+.constellation-section p.tag{color:var(--purple-bright); letter-spacing:.15em; font-size:.95rem; margin-bottom:6px;}
+.constellation-section .hint{color:var(--star); font-size:.95rem; margin-bottom:26px; opacity:.8;}
+#constellation{width:min(92vw, 460px); height:min(92vw,460px);}
+.const-line{
+  stroke:var(--purple-bright);
+  stroke-width:1.4;
+  fill:none;
+  opacity:0;
+  transition:opacity 1s ease;
+  filter:drop-shadow(0 0 4px var(--purple-bright));
+}
+.const-line.lit{opacity:.85;}
+.const-star{
+  cursor:pointer;
+  transition:transform .3s ease;
+}
+.const-star circle.core{
+  fill:var(--star);
+  filter:drop-shadow(0 0 6px var(--purple-bright));
+}
+.const-star.found circle.core{fill:var(--pink);}
+.const-star:hover{transform:scale(1.25);}
+.const-star .ring{
+  fill:none; stroke:rgba(201,164,245,0.5); stroke-width:1;
+  animation:pulse-ring 2.4s ease-in-out infinite;
+}
+@keyframes pulse-ring{
+  0%,100%{opacity:.3; r:10;}
+  50%{opacity:.7; r:14;}
+}
+#reason-popup{
+  margin-top:26px;
+  max-width:420px;
+  min-height:1.6em;
+  font-family:'Dancing Script', cursive;
+  font-size:1.6rem;
+  color:var(--pink);
+  opacity:0;
+  transform:translateY(8px);
+  transition:all .5s ease;
+}
+#reason-popup.show{opacity:1; transform:translateY(0);}
+.progress-note{margin-top:14px; font-size:.9rem; color:rgba(230,205,251,0.55); letter-spacing:.1em;}
+
+/* ---------- letter / heart ---------- */
+.heart-wrap{
+  position:relative;
+  width:220px; height:200px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  user-select:none;
+}
+.heart-wrap svg{width:180px; height:170px; overflow:visible;}
+.heart-half{
+  transition:transform 1.1s cubic-bezier(.22,1,.36,1), opacity 1.1s ease;
+  transform-origin:center;
+}
+.heart-wrap.opened .heart-left{transform:translate(-70px,-25px) rotate(-25deg); opacity:0;}
+.heart-wrap.opened .heart-right{transform:translate(70px,-25px) rotate(25deg); opacity:0;}
+.heart-glow{
+  animation:heartbeat 1.6s ease-in-out infinite;
+}
+.heart-wrap.opened .heart-glow{animation:none;}
+@keyframes heartbeat{
+  0%,100%{transform:scale(1);}
+  15%{transform:scale(1.08);}
+  30%{transform:scale(0.98);}
+  45%{transform:scale(1.05);}
+}
+.tap-hint{
+  position:absolute;
+  bottom:-6px;
+  font-size:.85rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--purple-bright);
+  opacity:.75;
+  transition:opacity .6s ease;
+}
+.heart-wrap.opened .tap-hint{opacity:0;}
+
+.letter-paper{
+  margin-top:20px;
+  max-width:540px;
+  background:linear-gradient(180deg, #fdf6ff, #f3e6fb);
+  color:#3a1660;
+  border-radius:6px;
+  padding:44px 40px 34px;
+  box-shadow:0 30px 70px rgba(30,5,55,0.55), 0 0 0 1px rgba(139,63,201,0.25);
+  opacity:0;
+  transform:translateY(40px) scale(.94);
+  pointer-events:none;
+  transition:all 1s cubic-bezier(.22,1,.36,1);
+  transition-delay:.3s;
+  position:relative;
+}
+.letter-paper::before{
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:6px;
+  background:linear-gradient(90deg, var(--purple), var(--pink), var(--purple));
+  border-radius:6px 6px 0 0;
+}
+.letter-paper.show{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+.letter-paper p{
+  font-family:'Dancing Script', cursive;
+  font-size:1.5rem;
+  line-height:1.65;
+  text-align:left;
+  white-space:pre-wrap;
+  margin:0 0 10px;
+}
+.letter-paper .signature{
+  text-align:right;
+  font-size:1.7rem;
+  margin-top:18px;
+  color:var(--purple);
+}
+
+footer{
+  position:relative; z-index:1;
+  text-align:center;
+  padding:50px 20px 70px;
+  color:var(--purple-bright);
+  font-family:'Dancing Script', cursive;
+  font-size:1.4rem;
+  letter-spacing:.02em;
+}
+
+/* ---------- music toggle ---------- */
+#music-toggle{
+  position:fixed;
+  bottom:22px;
+  right:22px;
+  z-index:5;
+  width:54px; height:54px;
+  border-radius:50%;
+  background:linear-gradient(160deg, var(--purple-bright), var(--purple-deep));
+  border:1px solid rgba(230,205,251,0.5);
+  box-shadow:0 6px 24px rgba(60,10,90,0.55);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  font-size:1.3rem;
+  color:#fff;
+}
+#music-toggle.playing{animation:spin 6s linear infinite;}
+@keyframes spin{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
+#music-caption{
+  position:fixed;
+  bottom:30px;
+  right:84px;
+  z-index:5;
+  font-family:'Dancing Script', cursive;
+  font-size:1rem;
+  color:var(--purple-light);
+  opacity:.85;
+  max-width:160px;
+  text-align:right;
+  pointer-events:none;
+}
+
+/* the "special memory" frame gets a little more presence */
+.frame.special{
+  grid-column: span 2;
+  max-width:320px;
+  margin:0 auto;
+  border-color:rgba(240,185,238,0.55);
+}
+.frame.special figcaption{color:var(--pink);}
+
+/* ---------- choose me again ---------- */
+.choose-section p.tag{color:var(--purple-bright); letter-spacing:.15em; font-size:.9rem; margin-bottom:8px;}
+.choose-wrap{
+  position:relative;
+  display:flex;
+  gap:30px;
+  margin-top:20px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.choice-arrow{
+  position:absolute;
+  top:-58px;
+  left:calc(50% - 96px);
+  width:70px;
+  transform:rotate(8deg);
+  opacity:.9;
+}
+.choice-arrow-label{
+  position:absolute;
+  top:-78px;
+  left:calc(50% - 150px);
+  font-family:'Dancing Script', cursive;
+  font-size:1.15rem;
+  color:var(--pink);
+  transform:rotate(-4deg);
+  white-space:nowrap;
+}
+.choice-box{
+  width:130px;
+  padding:26px 10px;
+  border-radius:12px;
+  background:rgba(139,63,201,0.12);
+  border:1.5px solid rgba(181,101,232,0.5);
+  color:var(--purple-light);
+  font-family:'Playfair Display', serif;
+  font-size:1.3rem;
+  letter-spacing:.05em;
+  cursor:pointer;
+  transition:all .35s ease;
+}
+.choice-box:hover{
+  transform:translateY(-4px);
+  background:rgba(181,101,232,0.22);
+  box-shadow:0 10px 26px rgba(139,63,201,0.4);
+}
+.choice-box.chosen{
+  background:rgba(181,101,232,0.3);
+  box-shadow:0 0 0 2px var(--purple-bright);
+}
+.choose-wrap.answered .choice-box:not(.chosen){opacity:.35; pointer-events:none;}
+
+.choice-result{
+  margin-top:36px;
+  min-height:60px;
+}
+.broken-heart{
+  font-size:3.2rem;
+  display:inline-block;
+  opacity:0;
+  transform:scale(.6);
+  animation:break-in .8s ease forwards;
+}
+@keyframes break-in{
+  0%{opacity:0; transform:scale(.4) rotate(0deg);}
+  60%{opacity:1; transform:scale(1.15) rotate(-6deg);}
+  100%{opacity:1; transform:scale(1) rotate(-4deg);}
+}
+.screenshot-msg{
+  margin-top:18px;
+  font-family:'Dancing Script', cursive;
+  font-size:1.4rem;
+  color:var(--purple-light);
+  opacity:0;
+  animation:fade-up .8s ease forwards;
+  animation-delay:.4s;
+}
+@keyframes fade-up{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+.pop-heart{
+  position:fixed;
+  bottom:-20px;
+  font-size:1.6rem;
+  z-index:6;
+  pointer-events:none;
+  animation:pop-up 2.6s ease-in forwards;
+}
+@keyframes pop-up{
+  0%{transform:translateY(0) scale(0.6) rotate(0deg); opacity:0;}
+  10%{opacity:1;}
+  100%{transform:translateY(-90vh) scale(1.2) rotate(20deg); opacity:0;}
+}
+
+@media (max-width:560px){
+  .frame-grid{grid-template-columns:1fr; max-width:340px;}
+  .frame.special{grid-column:span 1;}
+  .choice-arrow, .choice-arrow-label{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div id="stars-container"></div>
+<div class="floating-flowers" id="flowers"></div>
+
+<!-- background music: add an mp3 file named song.mp3 next to this html file
+     (any romantic PND track you own works — e.g. "Come and See Me" or
+     "Believe Me"). Browsers block autoplay with sound, so it starts on tap. -->
+<audio id="bg-music" src="C:\Users\Thando\Downloads\sza.mp3" loop preload="none" onerror="document.getElementById('music-toggle').style.display='none'; document.getElementById('music-caption').style.display='none';"></audio>
+<div id="music-toggle" title="play our song">♪</div>
+<div id="music-caption">SZA- Normal Girl — tap to play</div>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <h1 class="hero-title">For <span id="her-name-slot">My Beautiful Girlfriend</span></h1>
+  <p class="hero-sub">A small universe, built just for you</p>
+  <div class="counter" id="counter"></div>
+  <div class="scroll-cue">scroll ↓</div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section class="gallery">
+  <h2>Moments I keep</h2>
+  <div class="frame-grid">
+    <div class="frame">
+      <svg class="corner-flower" viewBox="0 0 40 40"><use href="#flower-svg"/></svg>
+      <img src="C:\Users\Thando\Downloads\HER.JPEG" alt="us, photo one" onerror="this.replaceWith(placeholderBox('C:\Users\Thando\Downloads\HER.JPEG'))">
+      <figcaption>My small nana</figcaption>
+    </div>
+    <div class="frame">
+      <svg class="corner-flower" viewBox="0 0 40 40"><use href="#flower-svg"/></svg>
+      <img src="C:\Users\Thando\Downloads\ME.JPEG" alt="us, photo two" onerror="this.replaceWith(placeholderBox('C:\Users\Thando\Downloads\ME.JPEG'))">
+      <figcaption>Your small nana</figcaption>
+    </div>
+    <div class="frame">
+      <svg class="corner-flower" viewBox="0 0 40 40"><use href="#flower-svg"/></svg>
+      <video src="C:\Users\Thando\Downloads\HERVID.mp4" controls onerror="this.replaceWith(placeholderBox('C:\Users\Thando\Downloads\HERVID.mp4'))"></video>
+      <figcaption>You being you</figcaption>
+    </div>
+    <div class="frame">
+      <svg class="corner-flower" viewBox="0 0 40 40"><use href="#flower-svg"/></svg>
+      <video src="C:\Users\Thando\Downloads\MYVID.mp4" controls onerror="this.replaceWith(placeholderBox('C:\Users\Thando\Downloads\MYVID.mp4'))"></video>
+      <figcaption>A moment I'd replay forever</figcaption>
+    </div>
+    <div class="frame special">
+      <svg class="corner-flower" viewBox="0 0 40 40"><use href="#flower-svg"/></svg>
+      <img src="C:\Users\Thando\Downloads\ILUV.JPEG" alt="the day you said it first" onerror="this.replaceWith(placeholderBox('C:\Users\Thando\Downloads\ILUV.JPEG'))">
+      <figcaption>The day you said "I love you" first</figcaption>
+    </div>
+  </div>
+  <h2>NOTES</h2>
+  <div class="frame-grid">
+    <div class="frame">
+      <svg class="corner-flower" viewBox="0 0 40 40"><use href="#flower-svg"/></svg>
+      <img src="C:\Users\Thando\Downloads\1.JPEG" alt="us, photo one" onerror="this.replaceWith(placeholderBox('C:\Users\Thando\Downloads\.JPEG'))">
+    </div>
+  <div class="frame-grid">
+    <div class="frame">
+      <svg class="corner-flower" viewBox="0 0 40 40"><use href="#flower-svg"/></svg>
+      <img src="C:\Users\Thando\Downloads\2.JPEG" alt="us, photo one" onerror="this.replaceWith(placeholderBox('C:\Users\Thando\Downloads\.JPEG'))">
+    </div>
+  <div class="frame-grid">
+    <div class="frame">
+      <svg class="corner-flower" viewBox="0 0 40 40"><use href="#flower-svg"/></svg>
+      <img src="C:\Users\Thando\Downloads\3.JPEG" alt="us, photo one" onerror="this.replaceWith(placeholderBox('C:\Users\Thando\Downloads\.JPEG'))">
+    </div>
+</section>
+
+<!-- ================= CONSTELLATION ================= -->
+<section class="constellation-section">
+  <p class="tag">Something just for us</p>
+  <h2>Our Little Constellation</h2>
+  <p class="hint">Tap every star to find out why</p>
+  <svg id="constellation" viewBox="0 0 400 400"></svg>
+  <div id="reason-popup"></div>
+  <div class="progress-note" id="progress-note">0 / 6 stars found</div>
+</section>
+
+<!-- ================= LETTER ================= -->
+<section class="letter-section">
+  <p class="tag">One more thing</p>
+  <h2>Open when ready</h2>
+  <div class="heart-wrap" id="heart-wrap">
+    <svg viewBox="0 0 200 170" class="heart-glow">
+      <path class="heart-half heart-left" d="M100,150 C40,105 10,70 10,42 C10,15 32,2 52,2 C72,2 90,14 100,34 C100,34 100,34 100,34 L100,150 Z" fill="url(#heartGradL)"/>
+      <path class="heart-half heart-right" d="M100,150 C160,105 190,70 190,42 C190,15 168,2 148,2 C128,2 110,14 100,34 C100,34 100,34 100,34 L100,150 Z" fill="url(#heartGradR)"/>
+      <defs>
+        <linearGradient id="heartGradL" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#b565e8"/>
+          <stop offset="100%" stop-color="#6f28a8"/>
+        </linearGradient>
+        <linearGradient id="heartGradR" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f0b9ee"/>
+          <stop offset="100%" stop-color="#9b4fd6"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <span class="tap-hint">tap the heart</span>
+  </div>
+
+  <div class="letter-paper" id="letter-paper">
+    <p id="letter-text"></p>
+    <p class="signature" id="letter-sign"></p>
+  </div>
+</section>
+
+<!-- ================= CHOOSE ME AGAIN ================= -->
+<section class="choose-section">
+  <p class="tag">Last question</p>
+  <h2>Will you choose me again???</h2>
+  <div class="choose-wrap" id="choose-wrap">
+    <svg class="choice-arrow" viewBox="0 0 100 60">
+      <path d="M5,10 Q40,55 90,25" stroke="#f0b9ee" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M90,25 L78,18 M90,25 L80,34" stroke="#f0b9ee" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="choice-arrow-label">psst, this one</span>
+    <div class="choice-box" id="choice-yes">YES!!!!!</div>
+    <div class="choice-box" id="choice-no">NO!</div>
+  </div>
+  <div class="choice-result" id="choice-result"></div>
+</section>
+
+<footer id="footer-note">Made with all my love</footer>
+
+<!-- reusable flower symbol -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="flower-svg" viewBox="0 0 40 40">
+    <g>
+      <circle cx="20" cy="12" r="7" fill="#b565e8" opacity="0.9"/>
+      <circle cx="30" cy="20" r="7" fill="#9b4fd6" opacity="0.9"/>
+      <circle cx="20" cy="28" r="7" fill="#c98ae8" opacity="0.9"/>
+      <circle cx="10" cy="20" r="7" fill="#8b3fc9" opacity="0.9"/>
+      <circle cx="20" cy="20" r="6" fill="#f0e6fa"/>
+    </g>
+  </symbol>
+</svg>
+
+<script>
+/* ============================================================
+   ✦ EDIT ME — your words go here ✦
+   ============================================================ */
+const CONFIG = {
+  herName: "Tshepiso",                 // EDIT_HER_NAME
+  yourName: "Thando",              // EDIT_YOUR_NAME
+  startDate: "2026-06-19",            // EDIT_START_DATE  (format: YYYY-MM-DD)
+
+  letter:
+`I don't even know where to start because there are so many things I want to say. When I think about you, I don't just think about having a girlfriend. I think about having someone who makes me smile without even trying, someone I pray for, someone I genuinely want beside me through every stage of life. Loving you has never felt like something I was forced to do. It happened naturally, and every day, I choose you again.
+
+These past few weeks haven't been the easiest for us. There were moments where we misunderstood each other, moments where we both got hurt, moments where silence replaced conversations we used to have. If I'm honest, seeing us like that broke my heart. Not because I stopped loving you, but because I love you so much that I hated knowing I had contributed to your pain.
+
+I still remember apologizing to you because I couldn't bear the thought of making someone I love feel hurt. Thank you for hearing my heart. Thank you for forgiving me even when you needed time to process everything. That meant more to me than I can explain.
+
+One thing I've realized is that love isn't just about saying "I love you." It's choosing each other when things become uncomfortable. It's learning each other's hearts. It's communicating even when we don't have all the right words. It's giving grace when mistakes happen. That's the kind of love I want us to have.
+
+I know life has been busy, and things haven't always gone the way we planned. We were excited to spend time together, and sometimes plans fell through. I won't lie and pretend it hasn't disappointed me because spending quality time with you means so much to me. Those moments are how I feel closest to you. But even through the disappointment, one thing hasn't changed. I still want it to be you.
+
+I don't expect us to have a perfect relationship. I don't expect us to never argue or never make mistakes again. What I do hope is that we become the kind of couple that chooses to understand each other instead of assuming the worst, that talks through problems instead of letting them build walls between us, and that always remembers we're on the same team.
+
+Thank you for being patient with me. Thank you for making me laugh, for listening to me, for trusting me with your heart, and for allowing me to love you.
+
+As I write this, I don't want us to go backwards. I want us to move forward. I want us to leave behind the fear, the overthinking, and the misunderstandings that have weighed us down. I want us to build something stronger than what we had before, not because our past wasn't beautiful, but because I believe our future can be even better if we keep choosing each other.
+
+So today, I'm asking you something from the bottom of my heart.
+
+Will you walk into this new chapter with me? Will you continue being my best friend, my safe place, and the person I get to love every day? I promise I'll keep learning, keep growing, keep listening, and keep showing up for us because what we have is worth fighting for.
+
+I love you more than words on this page could ever fully explain. No matter what life throws at us, I want to face it with you. I love you ❤️`,
+
+  reasons: [
+    "The way you laugh at your own jokes before you even finish them.",
+    "How you make any place feel like home just by being in it.",
+    "Your patience with me, even when I don't deserve it.",
+    "The way you remember the tiny things I forget about myself.",
+    "How safe and calm I feel whenever you're near.",
+    "Simply because you're you, and that's more than enough."
+  ]
+};
+/* ============================================================ */
+
+document.getElementById('her-name-slot').textContent = CONFIG.herName;
+document.getElementById('letter-text').textContent = CONFIG.letter;
+document.getElementById('letter-sign').textContent = "— " + CONFIG.yourName;
+
+/* fallback box if a photo/video file hasn't been added yet */
+function placeholderBox(name){
+  const div = document.createElement('div');
+  div.style.cssText = "height:200px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(181,101,232,0.08);border:1px dashed rgba(181,101,232,0.5);color:#d9b3f0;font-family:'Cormorant Garamond',serif;font-size:.95rem;text-align:center;padding:10px;";
+  div.textContent = "Add \"" + name + "\" next to this file to see it here";
+  return div;
+}
+
+/* ---------- days-together counter ---------- */
+(function counter(){
+  const el = document.getElementById('counter');
+  const start = new Date(CONFIG.startDate + "T00:00:00");
+  function tick(){
+    if(isNaN(start.getTime())){ el.style.display='none'; return; }
+    const now = new Date();
+    let diff = Math.max(0, now - start);
+    const days = Math.floor(diff/86400000);
+    el.innerHTML = "<b>"+days+"</b> days of loving you, and counting";
+  }
+  tick();
+  setInterval(tick, 60000);
+})();
+
+/* ---------- starfield ---------- */
+(function stars(){
+  const c = document.getElementById('stars-container');
+  const total = 140;
+  for(let i=0;i<total;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random()*2.4 + 0.6;
+    s.style.width = size+'px';
+    s.style.height = size+'px';
+    s.style.top = (Math.random()*100)+'%';
+    s.style.left = (Math.random()*100)+'%';
+    s.style.animationDuration = (2+Math.random()*3)+'s';
+    s.style.animationDelay = (Math.random()*4)+'s';
+    c.appendChild(s);
+  }
+  for(let i=0;i<4;i++){
+    const sh = document.createElement('div');
+    sh.className = 'shooting-star';
+    sh.style.top = (Math.random()*50)+'%';
+    sh.style.left = (60+Math.random()*35)+'%';
+    sh.style.animationDelay = (i*3.2 + Math.random()*4)+'s';
+    c.appendChild(sh);
+  }
+})();
+
+/* ---------- floating flowers ---------- */
+(function flowers(){
+  const c = document.getElementById('flowers');
+  const count = 8;
+  for(let i=0;i<count;i++){
+    const f = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    f.setAttribute('viewBox','0 0 40 40');
+    f.classList.add('flower');
+    f.innerHTML = '<use href="#flower-svg"/>';
+    f.style.left = (Math.random()*94)+'%';
+    f.style.bottom = '-40px';
+    f.style.width = (18+Math.random()*22)+'px';
+    f.style.height = f.style.width;
+    f.style.animationDuration = (16+Math.random()*14)+'s';
+    f.style.animationDelay = (Math.random()*18)+'s';
+    c.appendChild(f);
+  }
+})();
+
+/* ---------- constellation of love ---------- */
+(function constellation(){
+  const svg = document.getElementById('constellation');
+  const popup = document.getElementById('reason-popup');
+  const progressNote = document.getElementById('progress-note');
+  const points = [
+    {x:200,y:150},{x:303.9,y:85},{x:303.9,y:255},
+    {x:200,y:370},{x:96.1,y:255},{x:96.1,y:85}
+  ];
+  let found = 0;
+
+  // draw connecting lines first (so stars render on top)
+  const lines = [];
+  for(let i=0;i<points.length;i++){
+    const a = points[i];
+    const b = points[(i+1)%points.length];
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',a.x); line.setAttribute('y1',a.y);
+    line.setAttribute('x2',b.x); line.setAttribute('y2',b.y);
+    line.classList.add('const-line');
+    svg.appendChild(line);
+    lines.push(line);
+  }
+
+  points.forEach((p, idx)=>{
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.classList.add('const-star');
+    g.setAttribute('data-idx', idx);
+
+    const ring = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    ring.classList.add('ring');
+    ring.setAttribute('cx',p.x); ring.setAttribute('cy',p.y); ring.setAttribute('r',10);
+    g.appendChild(ring);
+
+    const core = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    core.classList.add('core');
+    core.setAttribute('cx',p.x); core.setAttribute('cy',p.y); core.setAttribute('r',6);
+    g.appendChild(core);
+
+    g.addEventListener('click', ()=>{
+      if(g.classList.contains('found')) return;
+      g.classList.add('found');
+      // light up the line leading into this star and out of it
+      lines[idx].classList.add('lit');
+      lines[(idx-1+points.length)%points.length].classList.add('lit');
+      found++;
+      popup.textContent = CONFIG.reasons[idx] || "";
+      popup.classList.add('show');
+      progressNote.textContent = found + " / 6 stars found";
+      if(found === points.length){
+        progressNote.textContent = "all six found — that's a whole heart";
+      }
+    });
+
+    svg.appendChild(g);
+  });
+})();
+
+/* ---------- heart / letter reveal ---------- */
+(function heartLetter(){
+  const wrap = document.getElementById('heart-wrap');
+  const paper = document.getElementById('letter-paper');
+  wrap.addEventListener('click', ()=>{
+    if(wrap.classList.contains('opened')) return;
+    wrap.classList.add('opened');
+    setTimeout(()=> paper.classList.add('show'), 250);
+  });
+})();
+
+/* ---------- background music toggle ---------- */
+(function music(){
+  const btn = document.getElementById('music-toggle');
+  const audio = document.getElementById('bg-music');
+  const caption = document.getElementById('music-caption');
+  let playing = false;
+  btn.addEventListener('click', ()=>{
+    if(!playing){
+      audio.play().then(()=>{
+        playing = true;
+        btn.classList.add('playing');
+        btn.textContent = '❚❚';
+        caption.textContent = 'your song';
+      }).catch(()=>{
+        caption.textContent = "add sza.mp3 next to this file";
+      });
+    } else {
+      audio.pause();
+      playing = false;
+      btn.classList.remove('playing');
+      btn.textContent = '♪';
+      caption.textContent = 'SZA- Normal Girl — tap to play';
+    }
+  });
+})();
+
+/* ---------- choose me again ---------- */
+(function chooseMeAgain(){
+  const wrap = document.getElementById('choose-wrap');
+  const result = document.getElementById('choice-result');
+  const yesBtn = document.getElementById('choice-yes');
+  const noBtn = document.getElementById('choice-no');
+  let answered = false;
+
+  function popHearts(){
+    const emojis = ['💜'];
+    for(let i=0;i<26;i++){
+      setTimeout(()=>{
+        const h = document.createElement('span');
+        h.className = 'pop-heart';
+        h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        h.style.left = (Math.random()*90 + 5) + 'vw';
+        h.style.fontSize = (1.1 + Math.random()*1.4) + 'rem';
+        document.body.appendChild(h);
+        setTimeout(()=> h.remove(), 2700);
+      }, i*70);
+    }
+  }
+
+  function choose(kind){
+    if(answered) return;
+    answered = true;
+    wrap.classList.add('answered');
+    if(kind === 'yes'){
+      yesBtn.classList.add('chosen');
+      popHearts();
+      result.innerHTML =
+        '<div class="broken-heart">💜</div>' +
+        '<div class="screenshot-msg">I knew it and I love you so much. Screenshot this and send it to me on WhatsApp💌</div>';
+    } else {
+      noBtn.classList.add('chosen');
+      result.innerHTML =
+        '<div class="broken-heart">💔</div>' +
+        '<div class="screenshot-msg">ouch. I am really sad. Screenshot this and send it to me on WhatsApp anyway🥺</div>';
+    }
+  }
+
+  yesBtn.addEventListener('click', ()=>choose('yes'));
+  noBtn.addEventListener('click', ()=>choose('no'));
+})();
+
+document.getElementById('footer-note').textContent = "Made with all my love — " + CONFIG.mathandos;
+</script>
+</body>
+</html>
